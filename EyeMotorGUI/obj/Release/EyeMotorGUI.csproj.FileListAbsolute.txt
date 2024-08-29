@@ -1,0 +1,10 @@
+C:\Users\wur\source\repos\EyeMotor\EyeMotorGUI\bin\Release\EyeMotorGUI.exe.config
+C:\Users\wur\source\repos\EyeMotor\EyeMotorGUI\bin\Release\EyeMotorGUI.exe
+C:\Users\wur\source\repos\EyeMotor\EyeMotorGUI\bin\Release\EyeMotorGUI.pdb
+C:\Users\wur\source\repos\EyeMotor\EyeMotorGUI\obj\Release\EyeMotorGUI.csprojAssemblyReference.cache
+C:\Users\wur\source\repos\EyeMotor\EyeMotorGUI\obj\Release\EyeMotorGUI.Form1.resources
+C:\Users\wur\source\repos\EyeMotor\EyeMotorGUI\obj\Release\EyeMotorGUI.Properties.Resources.resources
+C:\Users\wur\source\repos\EyeMotor\EyeMotorGUI\obj\Release\EyeMotorGUI.csproj.GenerateResource.cache
+C:\Users\wur\source\repos\EyeMotor\EyeMotorGUI\obj\Release\EyeMotorGUI.csproj.CoreCompileInputs.cache
+C:\Users\wur\source\repos\EyeMotor\EyeMotorGUI\obj\Release\EyeMotorGUI.exe
+C:\Users\wur\source\repos\EyeMotor\EyeMotorGUI\obj\Release\EyeMotorGUI.pdb
