@@ -66,10 +66,16 @@ namespace EyeMotorGUI
             this.ManualSet = new System.Windows.Forms.Button();
             this.SeqFromFile = new System.Windows.Forms.Button();
             this.OpenFile = new System.Windows.Forms.Button();
+            this.SendSeq = new System.Windows.Forms.Button();
+            this.TestMessage = new System.Windows.Forms.Button();
+            this.label4 = new System.Windows.Forms.Label();
+            this.bpanel = new System.Windows.Forms.Panel();
+            this.bpanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // serialPort1
             // 
+            this.serialPort1.BaudRate = 3000000;
             this.serialPort1.PortName = "COM3";
             // 
             // demoButton
@@ -116,16 +122,6 @@ namespace EyeMotorGUI
             this.textBox3.TabIndex = 4;
             this.textBox3.TextChanged += new System.EventHandler(this.TextBox3_TextChanged);
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(528, 531);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(105, 20);
-            this.label1.TabIndex = 5;
-            this.label1.Text = "First Rotation";
-            this.label1.Click += new System.EventHandler(this.Label1_Click);
-            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -135,6 +131,16 @@ namespace EyeMotorGUI
             this.label2.TabIndex = 6;
             this.label2.Text = "Second Rotation";
             this.label2.Click += new System.EventHandler(this.Label2_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(528, 531);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(105, 20);
+            this.label1.TabIndex = 5;
+            this.label1.Text = "First Rotation";
+            this.label1.Click += new System.EventHandler(this.Label1_Click);
             // 
             // label3
             // 
@@ -364,10 +370,11 @@ namespace EyeMotorGUI
             this.SeqFromFile.TabIndex = 38;
             this.SeqFromFile.Text = "Rotation Sequence From File";
             this.SeqFromFile.UseVisualStyleBackColor = true;
+            this.SeqFromFile.Click += new System.EventHandler(this.SeqFromFile_Click);
             // 
             // OpenFile
             // 
-            this.OpenFile.Location = new System.Drawing.Point(1287, 310);
+            this.OpenFile.Location = new System.Drawing.Point(54, 165);
             this.OpenFile.Name = "OpenFile";
             this.OpenFile.Size = new System.Drawing.Size(292, 50);
             this.OpenFile.TabIndex = 39;
@@ -375,12 +382,56 @@ namespace EyeMotorGUI
             this.OpenFile.UseVisualStyleBackColor = true;
             this.OpenFile.Click += new System.EventHandler(this.OpenFile_Click);
             // 
+            // SendSeq
+            // 
+            this.SendSeq.Location = new System.Drawing.Point(54, 237);
+            this.SendSeq.Name = "SendSeq";
+            this.SendSeq.Size = new System.Drawing.Size(292, 51);
+            this.SendSeq.TabIndex = 40;
+            this.SendSeq.Text = "Send Sequence";
+            this.SendSeq.UseVisualStyleBackColor = true;
+            this.SendSeq.Click += new System.EventHandler(this.SendSeq_Click);
+            // 
+            // TestMessage
+            // 
+            this.TestMessage.Location = new System.Drawing.Point(1600, 1136);
+            this.TestMessage.Name = "TestMessage";
+            this.TestMessage.Size = new System.Drawing.Size(120, 68);
+            this.TestMessage.TabIndex = 41;
+            this.TestMessage.Text = "TestMessage";
+            this.TestMessage.UseVisualStyleBackColor = true;
+            this.TestMessage.Visible = false;
+            this.TestMessage.Click += new System.EventHandler(this.Button1_Click);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(62, 95);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(284, 30);
+            this.label4.TabIndex = 42;
+            this.label4.Text = "File Sequence Manager";
+            this.label4.Click += new System.EventHandler(this.Label4_Click_1);
+            // 
+            // bpanel
+            // 
+            this.bpanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.bpanel.Controls.Add(this.label4);
+            this.bpanel.Controls.Add(this.SendSeq);
+            this.bpanel.Controls.Add(this.OpenFile);
+            this.bpanel.Location = new System.Drawing.Point(614, 380);
+            this.bpanel.Name = "bpanel";
+            this.bpanel.Size = new System.Drawing.Size(409, 390);
+            this.bpanel.TabIndex = 43;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1732, 1216);
-            this.Controls.Add(this.OpenFile);
+            this.Controls.Add(this.bpanel);
+            this.Controls.Add(this.TestMessage);
             this.Controls.Add(this.SeqFromFile);
             this.Controls.Add(this.ManualSet);
             this.Controls.Add(this.label7);
@@ -416,8 +467,10 @@ namespace EyeMotorGUI
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "Form1";
-            this.Text = "Eye Motor GUI";
+            this.Text = "SeriCommand";
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.bpanel.ResumeLayout(false);
+            this.bpanel.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -460,5 +513,9 @@ namespace EyeMotorGUI
         private System.Windows.Forms.Button ManualSet;
         private System.Windows.Forms.Button SeqFromFile;
         private System.Windows.Forms.Button OpenFile;
+        private System.Windows.Forms.Button SendSeq;
+        private System.Windows.Forms.Button TestMessage;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Panel bpanel;
     }
 }

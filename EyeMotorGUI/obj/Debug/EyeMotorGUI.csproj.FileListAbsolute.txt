@@ -2,9 +2,9 @@ C:\Users\wur\source\repos\EyeMotor\EyeMotorGUI\bin\Debug\EyeMotorGUI.exe.config
 C:\Users\wur\source\repos\EyeMotor\EyeMotorGUI\bin\Debug\EyeMotorGUI.exe
 C:\Users\wur\source\repos\EyeMotor\EyeMotorGUI\bin\Debug\EyeMotorGUI.pdb
 C:\Users\wur\source\repos\EyeMotor\EyeMotorGUI\obj\Debug\EyeMotorGUI.csprojAssemblyReference.cache
-C:\Users\wur\source\repos\EyeMotor\EyeMotorGUI\obj\Debug\EyeDataSequence.resources
 C:\Users\wur\source\repos\EyeMotor\EyeMotorGUI\obj\Debug\EyeMotorGUI.Properties.Resources.resources
 C:\Users\wur\source\repos\EyeMotor\EyeMotorGUI\obj\Debug\EyeMotorGUI.csproj.GenerateResource.cache
 C:\Users\wur\source\repos\EyeMotor\EyeMotorGUI\obj\Debug\EyeMotorGUI.csproj.CoreCompileInputs.cache
 C:\Users\wur\source\repos\EyeMotor\EyeMotorGUI\obj\Debug\EyeMotorGUI.exe
 C:\Users\wur\source\repos\EyeMotor\EyeMotorGUI\obj\Debug\EyeMotorGUI.pdb
+C:\Users\wur\source\repos\EyeMotor\EyeMotorGUI\obj\Debug\EyeMotorGUI.Form1.resources

@@ -10,24 +10,12 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Net.Mail;
+using System.Net;
 
 public struct MotorControl
 {
     public int rot1, rot2, rot3;
-};
-
-class EyeDataSequence
-{
-    public EyeDataSequence(float time, float LE, float RE, float LP, float RP)
-    {
-        this.time = time;
-        this.LE = LE;
-        this.RE = RE;
-        this.LP = LP;
-        this.RP = RP;
-    }
-
-    public float time, LE, RE, LP, RP;
 };
 
 namespace EyeMotorGUI
@@ -39,6 +27,8 @@ namespace EyeMotorGUI
         String rotationSequence;
 
         List<EyeDataSequence> eyeRotVals = new List<EyeDataSequence>();
+
+        DateTime dateTime = DateTime.UtcNow.Date;
 
         public Form1()
         {
@@ -92,6 +82,13 @@ namespace EyeMotorGUI
             this.ManualSet.Hide();
             this.label7.Hide();
             this.InstructionLabel.Hide();
+
+            //read from file labels and buttons.
+            this.SendSeq.Hide();
+            this.OpenFile.Hide();
+            this.label4.Hide();
+            this.bpanel.Hide();
+            
             //make the console read-only
             this.consoleOutput.ReadOnly = true;
 
@@ -145,6 +142,11 @@ namespace EyeMotorGUI
             this.ManualSet.Hide();
             this.label7.Hide();
 
+            this.SendSeq.Hide();
+            this.OpenFile.Hide();
+            this.label4.Hide();
+            this.bpanel.Hide();
+
             setBgColor(this.panel1, Color.Red);
             setBgColor(this.panel2, Color.Red);
         }
@@ -183,6 +185,11 @@ namespace EyeMotorGUI
             this.srl.Hide();
             this.thrl.Hide();
 
+            this.SendSeq.Hide();
+            this.OpenFile.Hide();
+            this.label4.Hide();
+            this.bpanel.Hide();
+
             //write the signal
             serialPort1.Write("ChangeManual");
         }
@@ -193,13 +200,13 @@ namespace EyeMotorGUI
             //this will prepare them to be sent to the arduino.
 
             //set data
-            amphiMotor.rot1 = Convert.ToInt32(LeftBx.Text);
+            amphiMotor.rot1 = -(Convert.ToInt32(LeftBx.Text));
 
             //creates the rotation sequence.
             rotationSequence = amphiMotor.rot1.ToString();
 
             //prints out to the program console.
-            WriteToConsole("Values " + amphiMotor.rot1 + " has been sent to the board");
+            WriteToConsole("Values " + -amphiMotor.rot1 + " has been sent to the board");
             WriteToConsole("Sequence sent: " + rotationSequence);
 
             WriteToConsole("Manual rotation sequence sent to the board.");
@@ -239,7 +246,7 @@ namespace EyeMotorGUI
                 rightMotor.rot3 = Convert.ToInt32(textBoxr3.Text) + 90;
 
                 //creates the rotation sequence.
-                rotationSequence = ", " + leftMotor.rot1 + ", " + leftMotor.rot2 + ", " + leftMotor.rot3 + ", " + rightMotor.rot1 + ", " + rightMotor.rot2 + ", " + rightMotor.rot3;
+                rotationSequence = -leftMotor.rot1 + ", " + -leftMotor.rot2 + ", " + -leftMotor.rot3 + ", " + -rightMotor.rot1 + ", " + -rightMotor.rot2 + ", " + -rightMotor.rot3;
 
                 //prints out to the program console.
                 WriteToConsole("Values " + leftMotor.rot1 + "," + leftMotor.rot2 + ", " + "and " + leftMotor.rot3 + " have been sent to the board");
@@ -299,10 +306,8 @@ namespace EyeMotorGUI
                 demoButton.Enabled = false;
                 customButton.Enabled = false;
             }
-
-
-
         }
+
 
 
         private async void Form_KeyDown(object sender, KeyEventArgs e)
@@ -456,7 +461,29 @@ namespace EyeMotorGUI
             Stream st;
             OpenFileDialog d1 = new OpenFileDialog();
 
-            int currentLine = 0;
+
+            /*   for each loop starts at 0. 
+                ->start the currentLine at line 1<-
+                
+                -skips line 1(the legend line)
+                
+                -Truly iterates every 20 lines.
+                
+                -Does this because the for loop starts
+                at index 0. 
+                
+                -There is only a line 1,
+                and so by going to line 20, it skips ahead,
+                since index 20 is actually going to be 
+                line 21 because the loop starts at 0.
+                
+                -There are no line 0s. Think of an array.
+                The first element is always stored at 
+                index 0. If you write 1 in there, it is going
+                to give you the second element in the array!
+
+            */
+            int currentLine = 1;
 
             if(d1.ShowDialog() == DialogResult.OK)
             {
@@ -466,18 +493,22 @@ namespace EyeMotorGUI
 
                     foreach(String str in File.ReadAllLines(file))
                     {
-
-                        if(currentLine != 0)
+                        if (currentLine % 40 == 0)
                         {
                             string[] split = str.Split(',');
 
-                            EyeDataSequence lineSeq = new EyeDataSequence(float.Parse(split[0]), float.Parse(split[1]), float.Parse(split[2]), float.Parse(split[3]), float.Parse(split[4]));
+                            //this has been re-ordered so that it is compatible with the data that is given by the arduino
+                            //the data that the arduino interprets is based off of the original format that was done by the
+                            //VR headset thing.
+
+                            //EyeDataSequence lineSeq = new EyeDataSequence(float.Parse(split[0]), float.Parse(split[1]), float.Parse(split[2]), float.Parse(split[3]), float.Parse(split[4]));
+
+                            EyeDataSequence lineSeq = new EyeDataSequence(float.Parse(split[0]), float.Parse(split[1]), float.Parse(split[3]), float.Parse(split[2]), float.Parse(split[4]));
 
                             eyeRotVals.Add(lineSeq);
 
-                            WriteToConsole(lineSeq.LP.ToString());
+                            //WriteToConsole(currentLine.ToString());
                         }
-
                         currentLine++;
                     }
 
@@ -486,7 +517,88 @@ namespace EyeMotorGUI
 
         }
 
+        //TODO: uncomment these things out whenever you get the board.
+        private async void SendSeq_Click(object sender, EventArgs e)
+        {
+            serialPort1.Write("D");
 
+            await Task.Delay(1000);
+
+            foreach (EyeDataSequence eyeseq in eyeRotVals)
+            {
+                await Task.Delay(1000);
+
+                rotationSequence = -eyeseq.LE + ", " + -eyeseq.RE + ", " + -eyeseq.LP + ", " + -eyeseq.RP;
+
+                WriteToConsole(rotationSequence);
+
+                serialPort1.Write(rotationSequence);
+            }
+
+
+            var message = new MailMessage();
+
+            message.From = new MailAddress("test@foobar.net");
+
+            message.To.Add(new MailAddress("2525312331@txt.att.net"));
+
+            message.Subject = dateTime.ToString("dd/MM/yyyy");
+            message.Body = "Data Testing Has Completed!";
+
+            var client = new SmtpClient("smtp.gmail.com")
+            {
+                Port = 587, // or 465 for SSL
+                EnableSsl = true,
+                Credentials = new NetworkCredential("trackingeye729@gmail.com", "znknfokqqqyhuzfl ")
+            };
+            client.Send(message);
+
+        }
+
+        private void Button1_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void Label4_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void SeqFromFile_Click(object sender, EventArgs e)
+        {
+            this.SendSeq.Show();
+            this.OpenFile.Show();
+            this.label4.Show();
+            this.bpanel.Show();
+
+            this.LeftBx.Hide();
+            this.ManualSet.Hide();
+            this.label7.Hide();
+            this.InstructionLabel.Hide();
+
+
+            //hide the stuff for the automatic input.
+            this.textBox1.Hide();
+            this.textBox2.Hide();
+            this.textBox3.Hide();
+            this.textBoxr1.Hide();
+            this.textBoxr2.Hide();
+            this.textBoxr3.Hide();
+            this.STB.Hide();
+            this.label1.Hide();
+            this.label2.Hide();
+            this.label3.Hide();
+            this.rMotorLabel.Hide();
+            this.lMotorLabel.Hide();
+            this.SVD.Hide();
+            this.panel1.Hide();
+            this.panel2.Hide();
+            this.frl.Hide();
+            this.srl.Hide();
+            this.thrl.Hide();
+
+        }
 
         private void LeftBx_TextChanged(object sender, EventArgs e)
         {
@@ -495,7 +607,6 @@ namespace EyeMotorGUI
                 MessageBox.Show("Please enter only numbers.");
                 this.textBoxr3.Text = this.textBoxr3.Text.Remove(this.textBoxr3.Text.Length - 1);
             }
-
         }
 
 
@@ -523,3 +634,5 @@ namespace EyeMotorGUI
 
     }
 }
+
+
